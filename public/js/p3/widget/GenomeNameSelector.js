@@ -119,6 +119,16 @@ define([
                                 });
 			}));
 		},
+        _startSearchFromInput: function(){
+			var _self=this;
+            if (_self.get("displayedValue") == "" && (! _self.required)){
+                _self.reset();
+                return;
+            }
+            else{
+                this.inherited(arguments);
+            }
+        },
 
 
 		/*isValid: function(){
