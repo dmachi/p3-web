@@ -34550,7 +34550,7 @@ function(Deferred,Topic,xhr,All){
 
 	function PollJobs() {
 		if (window.App && window.App.api && window.App.api.service) {
-			Deferred.when(window.App.api.service("AppService.enumerate_tasks",[0,50]), function(tasks){
+			Deferred.when(window.App.api.service("AppService.enumerate_tasks",[0,9999]), function(tasks){
 //				//console.log("tasks: ", tasks);
 				tasks[0].forEach(function(task){
 					if (!Jobs[task.id]){
@@ -38395,7 +38395,9 @@ function(_StoreMixin, declare, arrayUtil, lang, Deferred, on, query, string, has
 			//		Loads the given page.  Note that page numbers start at 1.
 			var grid = this,
 				dfd = new Deferred();
-			
+		
+			console.log("GOTO PAGE QueryOptions: ", grid.get('queryOptions'), this.queryOptions);
+	
 			var result = this._trackError(function(){
 				var count = grid.rowsPerPage,
 					start = (page - 1) * count,
@@ -38432,6 +38434,7 @@ function(_StoreMixin, declare, arrayUtil, lang, Deferred, on, query, string, has
 				grid._isLoading = true;
 				
 				// Run new query and pass it into renderArray
+				console.log("GRID _STOREMIXIN QUERY: ", grid.query, " QUERY OPTIONS: ", options);
 				results = grid.store.query(grid.query, options);
 				
 				Deferred.when(grid.renderArray(results, null, options), function(rows){
@@ -38628,15 +38631,16 @@ function(kernel, declare, lang, Deferred, listen, aspect, put){
 			// summary:
 			//		Assigns a new query (and optionally queryOptions) to the list,
 			//		and tells it to refresh.
-			
+		
+			console.log("DGRID _setQuery queryOptions: ", queryOptions)	
 			var sort = queryOptions && queryOptions.sort;
-			
 			this.query = query !== undefined ? query : this.query;
 			this.queryOptions = queryOptions || this.queryOptions;
 			
 			// If we have new sort criteria, pass them through sort
 			// (which will update _sort and call refresh in itself).
 			// Otherwise, just refresh.
+			console.log("Sort: ", sort);
 			sort ? this.set("sort", sort) : this.refresh();
 		},
 		setStore: function(store, query, queryOptions){
