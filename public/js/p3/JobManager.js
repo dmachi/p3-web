@@ -8,7 +8,7 @@ function(Deferred,Topic,xhr,All){
 
 	function PollJobs() {
 		if (window.App && window.App.api && window.App.api.service) {
-			Deferred.when(window.App.api.service("AppService.enumerate_tasks",[0,50]), function(tasks){
+			Deferred.when(window.App.api.service("AppService.enumerate_tasks",[0,9999]), function(tasks){
 //				//console.log("tasks: ", tasks);
 				tasks[0].forEach(function(task){
 					if (!Jobs[task.id]){
