@@ -8,20 +8,22 @@ define("p3/widget/TaxonNameSelector", [
 	
 	return declare([FilteringSelect], {
 		apiServiceUrl: window.App.dataAPI,
-		promptMessage:'Scientific name of the organism being annotated.',
-		missingMessage:'Scientific Name must be provided.',
-		placeHolder:'e.g. species Bacillus Cereus',
+		promptMessage:'Taxonomy name of the organism being annotated.',
+		missingMessage:'Taxonomy Name must be provided.',
+		placeHolder:'e.g. Bacillus Cereus',
 		searchAttr: "taxon_name",
         resultFields: ["taxon_name","taxon_id","taxon_rank", "lineage_names"],
         rankAttrs: ["taxon_rank"],
         subStringAttrs: ["taxon_name"],
-        promoteAttrs: ["taxon_id^3","taxon_rank^2"],
+        promoteAttrs: ["taxon_name"],
+        boostQuery:["taxon_rank:superkingdom^7000000","taxon_rank:phylum^6000000","taxon_rank:class^5000000","taxon_rank:order^4000000","taxon_rank:family^3000000","taxon_rank:genus^2000000"],
         intAttrs:["taxon_id"],
         rankList:["species","no rank","genus","subspecies","family","order","class","phylum","species group","suborder","varietas","species subgroup","subclass","subgenus","forma","superphylum","superkingdom","tribe","subfamily","subphylum"],
 		//query: "?&select(taxon_name)",
-		queryExpr: "*${0}*",
+		queryExpr: "${0}",
 		pageSize: 25,
 		highlightMatch: "all",
+        segmentWildcard: true,
 		autoComplete: false,
 		store: null,
 		constructor: function(){
@@ -53,45 +55,60 @@ define("p3/widget/TaxonNameSelector", [
                         qString= newQString.trim();
                     }
                 });
-                
-                var queryParts= qString ? qString.split(/[ ,]+/) : [];
+               
+                if (_self.segmentWildcard){
+                    var queryParts= qString ? qString.split(/[ ,]+/) : [];
 
-                rankParts.forEach(function(qPart){
-                    _self.rankAttrs.forEach(function(item){
-                        extraSearch.push('('+item + ':' + qPart + ')');
+                    /*rankParts.forEach(function(qPart){
+                        _self.rankAttrs.forEach(function(item){
+                            extraSearch.push('('+item + ':' + qPart + ')');
+                        });
                     });
-                });
 
-                queryParts.forEach(function(qPart){
-                    _self.intAttrs.forEach(function(item){
-                        if(!isNaN(qPart) && qPart){ //only if its a number
-                            extraSearch.push("("+item + ":" + qPart + ")");
-                        }
-                    });
-                    _self.subStringAttrs.forEach(function(item){
-                        if (qPart.length > 1){
-                            extraSearch.push("("+item + ":" + qPart + ")"); //for this attribute value an exact match valued more
-                            extraSearch.push("("+item + ":*" + qPart + "*)");
-                        }
-                    });
-                });
-                if(queryParts.length){
-                    _self.subStringAttrs.forEach(function(item){
-                        extraSearch.push("("+item + ":*" + queryParts.join('*') + "*)");
-                    });
+                    queryParts.forEach(function(qPart){
+                        _self.intAttrs.forEach(function(item){
+                            if(!isNaN(qPart) && qPart){ //only if its a number
+                                extraSearch.push("("+item + ":" + qPart + ")");
+                            }
+                        });
+                        _self.subStringAttrs.forEach(function(item){
+                            if (qPart.length > 1){
+                                extraSearch.push("("+item + ":" + qPart + ")"); //for this attribute value an exact match valued more
+                                extraSearch.push("("+item + ":*" + qPart + "*)");
+                            }
+                        });
+                    });*/
+                    if(queryParts.length){
+                        _self.subStringAttrs.forEach(function(item){
+                            extraSearch.push("("+item + ":*" + queryParts.join('*') + "*)");
+                            extraSearch.push("("+item + ":" + queryParts.join(' ') + ")");
+                        });
+                    }
+
+                    q+="("+extraSearch.join(' OR ')+")";
                 }
-
-                q+="("+extraSearch.join(' OR ')+")";
+                else{
+                    q+=qString
+                }
 
 				if (_self.queryFilter) {
 					q+=_self.queryFilter
 				}
 
+                //pump up the volume on higher ranks
+				if (_self.boostQuery && _self.boostQuery.length>0) {
+                    q +='&defType=dismax'; //&bq='+_self.boostQuery.join(' OR ');
+                    q = q.replace("?q=","?q.alt=");
+                    _self.boostQuery.forEach(function(item){
+                        q += "&bq="+item
+                    });
+                }
+
 				if (_self.resultFields && _self.resultFields.length>0) {
 					q += "&fl=" + _self.resultFields.join(",");
 				}
 				if (_self.promoteAttrs && _self.promoteAttrs.length>0) {
-					q += '&qf="' + _self.promoteAttrs.join(" ")+'"';
+					q += '&qf=' + _self.promoteAttrs.join(" ");
 				}
                 //var re = new RegExp("\\s+","gi");
                 //q=q.replace(re,"+"); //hack appropriate web api handling spaces
