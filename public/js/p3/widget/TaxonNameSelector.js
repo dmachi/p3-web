@@ -8,9 +8,9 @@ define([
 	
 	return declare([FilteringSelect], {
 		apiServiceUrl: window.App.dataAPI,
-		promptMessage:'Scientific name of the organism being annotated.',
-		missingMessage:'Scientific Name must be provided.',
-		placeHolder:'e.g. species Bacillus Cereus',
+		promptMessage:'Taxonomy name of the organism being annotated.',
+		missingMessage:'Taxonomy Name must be provided.',
+		placeHolder:'e.g. Bacillus Cereus',
 		searchAttr: "taxon_name",
         resultFields: ["taxon_name","taxon_id","taxon_rank", "lineage_names"],
         rankAttrs: ["taxon_rank"],
