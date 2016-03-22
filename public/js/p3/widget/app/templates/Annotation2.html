@@ -17,14 +17,14 @@
 				</div>
 			</div>
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>Contigs</label><br>
 					<div data-dojo-type="p3/widget/WorkspaceObjectSelector" name="contigs" style="width:100%" required="true" data-dojo-props="type:['contigs'],multi:false,promptMessage:'Select or Upload Contigs to your workspace for Annotation',missingMessage:'Contigs must be provided.'"></div>
 				</div>
 			</div>
 
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>Domain</label><br>
 					<select data-dojo-type="dijit/form/Select" name="domain" data-dojo-attach-point="workspaceName" style="width:100%" required="true" data-dojo-props="intermediateChanges:true,missingMessage:'Name Must be provided for Folder',trim:true,placeHolder:'MySubFolder'">
 						<option value="Bacteria">Bacteria</option>
@@ -46,19 +46,19 @@
 				</div> 
 			</div>
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>My Label</label><br>
                     <div data-dojo-type="dijit/form/ValidationTextBox"  data-dojo-attach-event="onChange:updateOutputName" name="my_label" data-dojo-attach-point="myLabelWidget" required="true" data-dojo-props="intermediateChanges:true, missingMessage:'You must provide a label',trim:true,intermediateChanges:true,placeHolder:'My identifier123'"></div>
 				</div>
 			</div>
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong" style="width:380px">
 					<label>Output Name</label><br>
-					<div data-dojo-attach-point="output_nameWidget" style="background-color:#F0F1F3" data-dojo-type="p3/widget/WorkspaceFilenameValidationTextBox" name="output_file" style="width:100%" required="true" data-dojo-props="readOnly: true, promptMessage:'The output name for your Annotation Results',missingMessage:'Output Name must be provided.',trim:true,placeHolder:'Taxonomy + My Label'"></div>
+					<div data-dojo-attach-point="output_nameWidget" style="width:380px; background-color:#F0F1F3" data-dojo-type="p3/widget/WorkspaceFilenameValidationTextBox" name="output_file" style="width:100%" required="true" data-dojo-props="readOnly: true, promptMessage:'The output name for your Annotation Results',missingMessage:'Output Name must be provided.',trim:true,placeHolder:'Taxonomy + My Label'"></div>
 				</div>
 			</div>
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>Genetic Code</label><br>
 					<select data-dojo-attach-point="genetic_code" data-dojo-type="dijit/form/Select" name="code" style="width:100%" required="true" data-dojo-props="intermediateChanges:true,missingMessage:'Name Must be provided for Folder',trim:true,placeHolder:'MySubFolder'">
 						<option value="11">11 (Archaea & most Bacteria)</option>
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<div class="approw" style="display:none">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>Optional Annotation Source</label><br>
                      <div data-dojo-attach-event="onChange:onSuggestNameChange" data-dojo-type="p3/widget/GenomeNameSelector" name="reference_genome_id" maxHeight=200 style="width:100%" required="false" data-dojo-attach-point="ref_genome_id"></div>
                 </div>
@@ -75,7 +75,7 @@
 
 
 			<div class="approw">
-				<div class="appField">
+				<div class="appFieldLong">
 					<label>Output Folder</label><br>
 					<div data-dojo-attach-point="output_pathWidget" data-dojo-type="p3/widget/WorkspaceObjectSelector" name="output_path" style="width:100%" required="true" data-dojo-props="type:['folder'],multi:false,value:'${activeWorkspacePath}',workspace:'${activeWorkspace}',promptMessage:'The output folder for your Annotation Results',missingMessage:'Output Folder must be selected.'" data-dojo-attach-event="onChange:onOutputPathChange"></div>
 				</div>
