@@ -365,7 +365,7 @@ define([
         downloadFile: function(path){
             return Deferred.when(this.api("Workspace.get_download_url", [{objects: [path]}]), function(urls){
                 console.log("download Urls: ", urls);
-                window.open(urls[0],"Download");
+                window.open(urls[0]);
             });
         },
 
@@ -570,7 +570,7 @@ define([
                 Deferred.when(this.get("currentPath"), function(cwsp){ console.log("Current Workspace Path: ", cwsp) });
             }else{
                 this.currentPath="/";
-                this.currentWorkspace = "/";
+                this.currentWorkspace = "/NOWORKSPACE";
             }
         }
     }))()
