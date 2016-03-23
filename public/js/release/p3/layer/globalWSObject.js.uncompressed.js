@@ -16917,6 +16917,9 @@ define([
         },
 
         _currentWorkspaceGetter: function(){
+            if (!this.userId){
+                throw Error("Not Logged In");
+            }
             if (!this.currentWorkspace) {
                 this.currentWorkspace = Deferred.when(this.get('userWorkspaces'),lang.hitch(this,function(cws){
                     if (!cws || cws.length<1){
@@ -16933,6 +16936,10 @@ define([
         },
 
         _currentPathGetter: function(){
+            if (!this.userId){
+                throw Error("Not Logged In");
+
+            }
             if (!this.currentPath){
                 this.currentPath = Deferred.when(this.get('currentWorkspace'),lang.hitch(this,function(cws){
                     this.currentPath=cws.path;
@@ -16957,8 +16964,10 @@ define([
             this.apiUrl = apiUrl
             this.api = RPC(apiUrl, token);
             this.userId = userId;
-            Deferred.when(this.get("currentPath"), function(cwsp){ console.log("Current Workspace Path: ", cwsp) });
 
+            if (userId && token){
+                Deferred.when(this.get("currentPath"), function(cwsp){ console.log("Current Workspace Path: ", cwsp) });
+            }
         }
     }))()
 

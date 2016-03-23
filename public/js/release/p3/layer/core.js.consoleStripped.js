@@ -14607,6 +14607,9 @@ define([
         },
 
         _currentWorkspaceGetter: function(){
+            if (!this.userId){
+                throw Error("Not Logged In");
+            }
             if (!this.currentWorkspace) {
                 this.currentWorkspace = Deferred.when(this.get('userWorkspaces'),lang.hitch(this,function(cws){
                     if (!cws || cws.length<1){
@@ -14623,6 +14626,10 @@ define([
         },
 
         _currentPathGetter: function(){
+            if (!this.userId){
+                throw Error("Not Logged In");
+
+            }
             if (!this.currentPath){
                 this.currentPath = Deferred.when(this.get('currentWorkspace'),lang.hitch(this,function(cws){
                     this.currentPath=cws.path;
@@ -14647,8 +14654,10 @@ define([
             this.apiUrl = apiUrl
             this.api = RPC(apiUrl, token);
             this.userId = userId;
-            Deferred.when(this.get("currentPath"), function(cwsp){  0 && console.log("Current Workspace Path: ", cwsp) });
 
+            if (userId && token){
+                Deferred.when(this.get("currentPath"), function(cwsp){  0 && console.log("Current Workspace Path: ", cwsp) });
+            }
         }
     }))()
 
@@ -27588,10 +27597,11 @@ define([
 				}));
 
 			}), lang.hitch(this, function(err){
-				
+				err = err.message || err;
+				 0 && console.log("Error: ", err);
 				var parts = err.split("_ERROR_");
 				var m = parts[1] || parts[0];
-				var d = new Dialog({content: m, title: "Error Loading Workspace"});
+				var d = new Dialog({content: '<div style="min-width:340px;">' + m + "</div>", title: "Error Loading Workspace"});
 				d.show();
 			}));
 		},
