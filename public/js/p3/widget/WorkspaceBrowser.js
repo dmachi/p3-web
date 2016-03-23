@@ -731,10 +731,11 @@ define([
 				}));
 
 			}), lang.hitch(this, function(err){
-				
+				err = err.message || err;
+				console.log("Error: ", err);
 				var parts = err.split("_ERROR_");
 				var m = parts[1] || parts[0];
-				var d = new Dialog({content: m, title: "Error Loading Workspace"});
+				var d = new Dialog({content: '<div style="min-width:340px;">' + m + "</div>", title: "Error Loading Workspace"});
 				d.show();
 			}));
 		},
