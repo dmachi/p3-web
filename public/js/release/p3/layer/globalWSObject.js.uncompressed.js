@@ -16948,10 +16948,10 @@ define([
         },
 
         init: function(apiUrl, token, userId){
-            if (!apiUrl || !token || !userId){
-                console.log("Unable to initialize workspace manager. Args: ", arguments);
-                return;
-            }
+            // if (!apiUrl || !token || !userId){
+            //     console.log("Unable to initialize workspace manager. Args: ", arguments);
+            //     return;
+            // }
 
             this.token = token;
             this.apiUrl = apiUrl

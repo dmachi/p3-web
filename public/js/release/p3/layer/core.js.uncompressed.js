@@ -155,9 +155,9 @@ define([
 
 			if (!this.api) { this.api={}}
 
-			if (this.workspaceAPI && this.user){
-				WorkspaceManager.init(this.workspaceAPI, this.authorizationToken, this.user?this.user.id:"");				
-				this.api.workspace = RPC(this.workspaceAPI, this.authorizationToken);
+			if (this.workspaceAPI){
+				WorkspaceManager.init(this.workspaceAPI, this.authorizationToken||"", this.user?this.user.id:"");				
+				this.api.workspace = RPC(this.workspaceAPI, this.authorizationToken||"");
 			}
 
 			if (this.serviceAPI && this.user){
@@ -14638,10 +14638,10 @@ define([
         },
 
         init: function(apiUrl, token, userId){
-            if (!apiUrl || !token || !userId){
-                console.log("Unable to initialize workspace manager. Args: ", arguments);
-                return;
-            }
+            // if (!apiUrl || !token || !userId){
+            //     console.log("Unable to initialize workspace manager. Args: ", arguments);
+            //     return;
+            // }
 
             this.token = token;
             this.apiUrl = apiUrl
@@ -27377,10 +27377,10 @@ define([
 			var workspace = parts[0] + "/" + parts[1];
 			var obj;
 			console.log("Workspace: ", workspace, parts[1], val)
-			if (!window.App.user || !window.App.user.id){
-				Topic.publish("/login");
-				return;
-			}
+			// if (!window.App.user || !window.App.user.id){
+			// 	Topic.publish("/login");
+			// 	return;
+			// }
 			if (!parts[1]){
 				obj = {metadata: {type: "folder"}}
 			}else{
@@ -27588,7 +27588,10 @@ define([
 				}));
 
 			}), lang.hitch(this, function(err){
-				var d = new Dialog({content: err, title: "Error Loading Workspace"});
+				
+				var parts = err.split("_ERROR_");
+				var m = parts[1] || parts[0];
+				var d = new Dialog({content: m, title: "Error Loading Workspace"});
 				d.show();
 			}));
 		},
