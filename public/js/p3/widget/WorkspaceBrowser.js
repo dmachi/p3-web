@@ -520,10 +520,10 @@ define([
 			var workspace = parts[0] + "/" + parts[1];
 			var obj;
 			console.log("Workspace: ", workspace, parts[1], val)
-			if (!window.App.user || !window.App.user.id){
-				Topic.publish("/login");
-				return;
-			}
+			// if (!window.App.user || !window.App.user.id){
+			// 	Topic.publish("/login");
+			// 	return;
+			// }
 			if (!parts[1]){
 				obj = {metadata: {type: "folder"}}
 			}else{
@@ -731,7 +731,10 @@ define([
 				}));
 
 			}), lang.hitch(this, function(err){
-				var d = new Dialog({content: err, title: "Error Loading Workspace"});
+				
+				var parts = err.split("_ERROR_");
+				var m = parts[1] || parts[0];
+				var d = new Dialog({content: m, title: "Error Loading Workspace"});
 				d.show();
 			}));
 		},
