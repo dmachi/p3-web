@@ -730,6 +730,9 @@ define([
 */
 				}));
 
+			}), lang.hitch(this, function(err){
+				var d = new Dialog(content: err, title: "Error Loading Workspace");
+				d.show();
 			}));
 		},
 

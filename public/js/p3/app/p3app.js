@@ -93,7 +93,7 @@ define([
 				newState.widgetClass="p3/widget/WorkspaceManager";
 				newState.value=path;
 				newState.set= "path";
-				newState.requireAuth=true;
+				newState.requireAuth=false;
 				console.log("Navigate to ", newState);
 				_self.navigate(newState);
 			});
