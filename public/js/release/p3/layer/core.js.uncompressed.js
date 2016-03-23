@@ -95,7 +95,7 @@ define([
 				newState.widgetClass="p3/widget/WorkspaceManager";
 				newState.value=path;
 				newState.set= "path";
-				newState.requireAuth=true;
+				newState.requireAuth=false;
 				console.log("Navigate to ", newState);
 				_self.navigate(newState);
 			});
@@ -27587,6 +27587,9 @@ define([
 */
 				}));
 
+			}), lang.hitch(this, function(err){
+				var d = new Dialog({content: err, title: "Error Loading Workspace"});
+				d.show();
 			}));
 		},
 
@@ -38395,7 +38398,9 @@ function(_StoreMixin, declare, arrayUtil, lang, Deferred, on, query, string, has
 			//		Loads the given page.  Note that page numbers start at 1.
 			var grid = this,
 				dfd = new Deferred();
-			
+		
+			console.log("GOTO PAGE QueryOptions: ", grid.get('queryOptions'), this.queryOptions);
+	
 			var result = this._trackError(function(){
 				var count = grid.rowsPerPage,
 					start = (page - 1) * count,
@@ -38432,6 +38437,7 @@ function(_StoreMixin, declare, arrayUtil, lang, Deferred, on, query, string, has
 				grid._isLoading = true;
 				
 				// Run new query and pass it into renderArray
+				console.log("GRID _STOREMIXIN QUERY: ", grid.query, " QUERY OPTIONS: ", options);
 				results = grid.store.query(grid.query, options);
 				
 				Deferred.when(grid.renderArray(results, null, options), function(rows){
@@ -38628,15 +38634,16 @@ function(kernel, declare, lang, Deferred, listen, aspect, put){
 			// summary:
 			//		Assigns a new query (and optionally queryOptions) to the list,
 			//		and tells it to refresh.
-			
+		
+			console.log("DGRID _setQuery queryOptions: ", queryOptions)	
 			var sort = queryOptions && queryOptions.sort;
-			
 			this.query = query !== undefined ? query : this.query;
 			this.queryOptions = queryOptions || this.queryOptions;
 			
 			// If we have new sort criteria, pass them through sort
 			// (which will update _sort and call refresh in itself).
 			// Otherwise, just refresh.
+			console.log("Sort: ", sort);
 			sort ? this.set("sort", sort) : this.refresh();
 		},
 		setStore: function(store, query, queryOptions){
