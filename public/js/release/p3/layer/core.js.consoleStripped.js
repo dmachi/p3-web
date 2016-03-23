@@ -14443,8 +14443,8 @@ define([
         getDownloadUrls: function(paths) {
             var paths = paths instanceof Array ? paths : [paths];
             return Deferred.when(this.api("Workspace.get_download_url", [{objects: paths}]), function(urls){
-                       return urls[0];
-                   });
+		return urls[0];
+            });
         },
 
         downloadFile: function(path){
@@ -14531,12 +14531,14 @@ define([
 			   resultObjs.push(res);
                            return true;
                     }else{
-			
+			var headers = {
+				"X-Requested-With": null
+			}			
+			if (window.App.authorizationToken) {
+				headers.Authorization = "OAuth " + window.App.authorizationToken;
+			}	
  			  var d = xhr.get(meta.link_reference + "?download", {
-				headers: {
-					Authorization: "OAuth " + window.App.authorizationToken,	
-				        "X-Requested-With": null
-				}
+				headers: headers
 			  });
 
 			  return Deferred.when(d,function(data){
@@ -14607,9 +14609,6 @@ define([
         },
 
         _currentWorkspaceGetter: function(){
-            if (!this.userId){
-                throw Error("Not Logged In");
-            }
             if (!this.currentWorkspace) {
                 this.currentWorkspace = Deferred.when(this.get('userWorkspaces'),lang.hitch(this,function(cws){
                     if (!cws || cws.length<1){
@@ -14626,10 +14625,7 @@ define([
         },
 
         _currentPathGetter: function(){
-            if (!this.userId){
-                throw Error("Not Logged In");
-
-            }
+ 
             if (!this.currentPath){
                 this.currentPath = Deferred.when(this.get('currentWorkspace'),lang.hitch(this,function(cws){
                     this.currentPath=cws.path;
@@ -14657,6 +14653,9 @@ define([
 
             if (userId && token){
                 Deferred.when(this.get("currentPath"), function(cwsp){  0 && console.log("Current Workspace Path: ", cwsp) });
+            }else{
+                this.currentPath="/";
+                this.currentWorkspace = "/";
             }
         }
     }))()
