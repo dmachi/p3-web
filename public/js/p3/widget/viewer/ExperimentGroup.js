@@ -55,13 +55,17 @@ define([
 					wsItemDef.resolve([]);
 				}
 
-				if (obj && obj.data && obj.data.id_list && obj.data.id_list.expid){
-					var query = "?in(expid,(" + obj.data.id_list.expid.join(",") + "))";
+				console.log("id_ist: ", obj.data.id_list);
+				if (obj && obj.data && obj.data.id_list && obj.data.id_list.eid){
+					var list = obj.data.id_list.eid;
+					var query = "?or(in(eid,(" + list.join(",") + ")),in(expid,(" + list.join(",") +")))";
 					console.log("Query: ", query);
 					eidDefer = this.store.query(query)
 				}else{
 					eidDefer = [];
 				}
+
+			
 
 				Deferred.when(All([wsItemDef, eidDefer]), lang.hitch(this,function(res){
 					console.log("all res: ", res);
@@ -73,6 +77,7 @@ define([
 							return item;
 						});
 					}
+
 					var d = res[0].concat(res[1]);	
 					console.log("Combined Experiments: ", d);
 					this.viewer.renderArray(d);
