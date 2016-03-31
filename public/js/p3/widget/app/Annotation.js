@@ -60,6 +60,23 @@ define([
             } 
 			this._autoTaxSet=false;
 		},
+
+
+        updateOutputName: function(){
+            var current_output_name = [];
+            var sci_item = this.scientific_nameWidget.get("item");
+            var label_value = this.myLabelWidget.get("value");
+            if(sci_item && sci_item.lineage_names.length > 0){
+                current_output_name.push(sci_item.lineage_names.slice(-1)[0]);
+            }
+            if(label_value.length >0){
+                current_output_name.push(label_value);
+            }
+            if(current_output_name.length > 0){
+                this.output_nameWidget.set("value", current_output_name.join(" "));
+            }
+        },
+
 		onSuggestNameChange: function(val){
             this._autoTaxSet=true;
             var tax_id=this.scientific_nameWidget.get("value");
@@ -73,6 +90,7 @@ define([
                 this.tax_idWidget.set('displayedValue',tax_id);
                 this.tax_idWidget.set('value',tax_id);
 			    this.changeCode(this.scientific_nameWidget.get("item"));
+                this.updateOutputName();
             }
 			this._autoNameSet=false;
 			/*if (val && !this.output_nameWidget.get('value') || (this.output_nameWidget.get('value')&&this._selfSet)  ){
