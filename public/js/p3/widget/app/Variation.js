@@ -110,7 +110,7 @@ define([
 			//}
             var combinedList = pairedList.concat(singleList);
             submit_values["reference_genome_id"]=values["genome_name"];
-            submit_values["aligner"]=values["aligner"]
+            submit_values["mapper"]=values["mapper"]
             submit_values["caller"]=values["caller"]
 
 			pairedList.forEach(function(libRecord){
